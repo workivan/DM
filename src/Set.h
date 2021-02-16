@@ -4,7 +4,6 @@
 
 #ifndef C_SET_H
 #define C_SET_H
-#define MAX_SET_STR 80
 struct STR {
     char *str;
     STR *next;
@@ -17,13 +16,7 @@ struct SET {
 
     SET(std::string &name) : name(name) {
         head = nullptr;
-        std::cout << "Множество " << this->name << " создано\n";
-    };
-    SET(std::string &name, char* str) : name(name) {
-        head = new STR;
-        head->str = str;
-        head->next = nullptr;
-        std::cout << "Множество " << this->name << " создано\n";
+        std::cout << "Пустое множество " << this->name << " создано\n";
     };
 
     ~SET() {
@@ -32,13 +25,13 @@ struct SET {
     };
 
     //---Методы---
-    char *add(char * str);
+    void add(char * str);
 
-    char *del(char * str);
+    void del(const char * str) ;
 
     bool in(char * str);
 
-    int card();
+    unsigned int card();
 };
 
 //---Операции---
