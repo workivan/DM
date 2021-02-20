@@ -1,4 +1,4 @@
-set(SOURSES ${PROJECT_NAME}.src Set.cpp Set.h Sets.cpp Sets.h)
+set(SOURSES main.cpp MySets.h MySets.cpp MySet.h MySet.cpp)
 
 
-add_executable(${SOURSES})
+add_executable(${PROJECT_NAME}.src ${SOURSES})
