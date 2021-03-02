@@ -8,24 +8,26 @@
 void MYSET::add(std::string &str) {
     if (this->head == nullptr) {
         this->head = new STR(str, nullptr);
+        this->end = this->head;
         return;
     }
-    STR *last = this->head;
-    while (last->next != nullptr) {
-        last = last->next;
-    }
+    STR *last = this->end;
     last->next = new STR(str, nullptr);
+    this->end = last->next;
 }
 
 void MYSET::del(const std::string &str) {
-    STR *prev, *curr = this->head;
+    STR *prev = NULL, *curr = this->head;
     while (curr->str != str) {
         prev = curr;
         curr = curr->next;
     }
     if (curr == this->head) {
         this->head = this->head->next;
+        return;
     }
+    if (curr == this->end)
+        this->end = prev;
     prev->next = curr->next;
     delete curr;
 }

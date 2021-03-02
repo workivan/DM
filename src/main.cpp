@@ -101,7 +101,7 @@ bool include(MYSET &a, MYSET &b) {
 
 
 void menuLOW(MYSET &set) {
-    bool run = true;
+    bool error, run = true;
     while (run) {
         std::cout << "Выбирайте, какую операцию применем..:\n";
         std::cout << "1)Добавить элемент\n";
@@ -116,21 +116,40 @@ void menuLOW(MYSET &set) {
             switch (std::stol(number)) {
                 case 1:
                     std::cout << "Введите добавляемую строку..: ";
-                    std::cin >> str;
+                    std::cin.ignore();
+                    std::getline(std::cin, str);
                     std::cout << std::endl;
                     if (!set.in(str)) {
-                        set.add(str);
-                        std::cout << "Добавили..: " << str << "\n";
+                        if (str.size() > 80) {
+                            std::cout << "Слишком большая строка..\n";
+                            error = true;
+                        }
+                        for (char n: str) {
+                            if (n == '\"') {
+                                std::cout << "Ковычка внутри..\n";
+                                error = true;
+                                break;
+                            }
+                        }
+                        if (!error) {
+                            set.add(str);
+                            std::cout << "Добавили..: " << str << "\n";
+                        }
                     } else {
                         std::cout << "Уже есть такой..\n";
                     }
+                    error = false;
                     break;
                 case 2:
                     std::cout << "Введите удаляемую строку..: ";
                     std::cin >> str;
                     std::cout << std::endl;
-                    set.del(str);
-                    std::cout << "Удалили..: " << "\n";
+                    if (set.in(str)) {
+                        set.del(str);
+                        std::cout << "Удалили..: " << "\n";
+                    } else {
+                        std::cout << "Нет такого..: " << "\n";
+                    }
                     break;
                 case 3: {
                     std::cout << "Введите строку для поиска..: ";
@@ -194,10 +213,10 @@ void menuMID() {
     while (input) {
         input = true;
         go = true;
-        std::cout << "Назовите имя множества справа..:";
+        std::cout << "\nНазовите имя множества справа..:";
         std::cin >> tmp1;
         if (!std::all_of(tmp1.begin(), tmp1.end(), [](unsigned char c) { return std::isalpha(c); })) {
-            std::cout << "\nТОЛЬКО БУКВЫ..:";
+            std::cout << "\nТОЛЬКО АНГЛИЙСКИЕ БУКВЫ..:";
             continue;
         }
         for (auto &i : sets->list) {
@@ -288,13 +307,13 @@ void menuUP() {
                         std::cout << "Дайте множеству имя..:";
                         std::cin >> tmp;
                         if (!std::all_of(tmp.begin(), tmp.end(), [](unsigned char c) { return std::isalpha(c); })) {
-                            std::cout << "\nТОЛЬКО БУКВЫ..:";
+                            std::cout << "\nТОЛЬКО АНГЛИСКИЕ БУКВЫ..:";
                             input = true;
                             continue;
                         }
                         for (const auto &name: sets->list) {
                             if (tmp == name.getName()) {
-                                std::cout << "Уже существует такое имя..:\n";
+                                std::cout << "\nУже существует такое имя..:\n";
                                 input = true;
                                 break;
                             }
@@ -312,12 +331,12 @@ void menuUP() {
                         std::cout << "Назовите имя удаляемого множества..:";
                         std::cin >> tmp;
                         if (!std::all_of(tmp.begin(), tmp.end(), [](unsigned char c) { return std::isalpha(c); })) {
-                            std::cout << "\nТОЛЬКО БУКВЫ..:";
+                            std::cout << "\nТОЛЬКО АНГЛИСКИЕ БУКВЫ..:";
                             continue;
                         }
                         for (auto &it: sets->getList()) {
                             if (tmp == it.getName()) {
-                                std::cout << "Нашли то, что нужно и удалили\n";
+                                std::cout << "\nНашли то, что нужно и удалили\n";
                                 sets->delSet(it);
                                 go = false;
                                 break;
@@ -340,15 +359,15 @@ void menuUP() {
                 case 5:
                     while (input) {
                         input = false;
-                        std::cout << "Назовите имя множества..:";
+                        std::cout << "\nНазовите имя множества..:";
                         std::cin >> tmp;
                         if (!std::all_of(tmp.begin(), tmp.end(), [](unsigned char c) { return std::isalpha(c); })) {
-                            std::cout << "\nТОЛЬКО БУКВЫ..:";
+                            std::cout << "\nТОЛЬКО АНГЛИСКИЕ БУКВЫ..:";
                             continue;
                         }
                         for (auto &it: sets->list) {
                             if (tmp == it.getName()) {
-                                std::cout << "Нашли то, что нужно\n";
+                                std::cout << "\nНашли то, что нужно";
                                 menuLOW(it);
                                 go = false;
                                 break;
@@ -376,7 +395,7 @@ void menuUP() {
 }
 
 int main() {
-    std::cout << "Приветствую Вас в теоретико-множественном пакете пераций над множествами строк\n";
+    std::cout << "Приветствую Вас в теоретико-множественном пакете операций над множествами строк\n";
     menuUP();
     return 0;
 }

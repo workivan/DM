@@ -20,6 +20,7 @@ struct STR {
 struct MYSET {
     std::string name;
     STR *head;
+    STR *end;
 public:
     bool operator==(MYSET const) const;
 
